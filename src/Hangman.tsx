@@ -2,10 +2,12 @@ import React, {useState, useEffect} from 'react';
 
 interface Props {
     timeUp: boolean;
+    word: string;
+    result: boolean;
+    setResult: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Hangman = ({timeUp}: Props): JSX.Element => {
-    const word: string = "HANGMAN";
+const Hangman = ({timeUp, word, result, setResult}: Props): JSX.Element => {
     const alphabets: string[] = ["A", "B", "C", "D", "E", "F", "G",
     "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R",
     "S", "T", "U", "V", "W", "X", "Y", "Z"];
@@ -14,12 +16,19 @@ const Hangman = ({timeUp}: Props): JSX.Element => {
     
     const maskedWord = word.split('').map((letter: string) =>
         correctGuesses.includes(letter) ? letter : "_").join(" ");
-    
-    const result = timeUp && maskedWord.includes('_')
-                        ? <p>You lost!</p> 
-                        : !maskedWord.includes('_') 
-                            ? <p>You won!</p>
-                            : <p></p>
+        
+    useEffect(() => {
+        if (!maskedWord.includes('_')) {
+            setResult(true);
+            
+        }
+    })
+
+    // const result = timeUp && maskedWord.includes('_')
+    //                     ? <p>You lost!</p> 
+    //                     : !maskedWord.includes('_') 
+    //                         ? <p>You won!</p>
+    //                         : <p></p>
 
     return (
         <div>
@@ -43,7 +52,6 @@ const Hangman = ({timeUp}: Props): JSX.Element => {
                         </button>
                 )
             }
-            {result}
         </div>
     );
 }
