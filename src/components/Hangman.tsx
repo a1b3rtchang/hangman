@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import Timer from './Timer';
+import LetterButton from './LetterButton';
 
 interface Props {
     timeUp: boolean;
@@ -8,9 +9,11 @@ interface Props {
     time: number;
     result: boolean;
     setResult: React.Dispatch<React.SetStateAction<boolean>>;
+    numGuesses: number;
+    setNumGuesses: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const Hangman = ({timeUp, setTimeUp, word, time, result, setResult}: Props): JSX.Element => {
+const Hangman = ({timeUp, setTimeUp, word, time, result, setResult, numGuesses, setNumGuesses}: Props): JSX.Element => {
     const alphabets: string[] = ["A", "B", "C", "D", "E", "F", "G",
     "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R",
     "S", "T", "U", "V", "W", "X", "Y", "Z"];
@@ -29,9 +32,8 @@ const Hangman = ({timeUp, setTimeUp, word, time, result, setResult}: Props): JSX
         correctGuesses.includes(letter) ? letter : "_").join(" ");
 
     useEffect(() => {
-        if (!maskedWord.includes('_')) {
-            setResult(true);
-        }
+        if (!maskedWord.includes('_')) setResult(true);
+        if (numGuesses == 0) setTimeUp(true);
     })
 
     return (
@@ -41,20 +43,16 @@ const Hangman = ({timeUp, setTimeUp, word, time, result, setResult}: Props): JSX
                 {
                     alphabets.map(
                         (alphabet, index) => 
-                            <button
+                            <LetterButton
+                                alphabet={alphabet}
                                 key={index}
-                                onClick={
-                                    !timeUp
-                                        ? () => {
-                                            if (word.includes(alphabet)) {
-                                                setCorrectGuesses([...correctGuesses, alphabet])
-                                            }
-                                        }
-                                        : () => {}
-                                }
-                            >
-                                {alphabet}
-                            </button>
+                                timeUp={timeUp}
+                                word={word}
+                                correctGuesses={correctGuesses}
+                                setCorrectGuesses={setCorrectGuesses}
+                                numGuesses={numGuesses}
+                                setNumGuesses={setNumGuesses}
+                            />
                     )
                 }
             </div>

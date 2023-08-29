@@ -1,29 +1,34 @@
 import React, { useState, useEffect, ReactElement } from 'react';
-import Hangman from './Hangman';
+import Hangman from './components/Hangman';
 import './App.css';
 
 
 function App() {
 
-  const [timeUp, setTimeUp] = useState<boolean>(false);
-  const [time, setTime] = useState<number>(1);
-  const [gameStage, setGameStage] = useState<string>("before");
-  const [result, setResult] = useState<boolean>(false);
-  const [word, setWord] = useState<string>("");
+  const [timeUp, setTimeUp] = useState<boolean>(false);         //whether time is up or not
+  const [time, setTime] = useState<number>(1);                  //how much time to allow
+  const [gameStage, setGameStage] = useState<string>("before"); //determines which page to show
+  const [result, setResult] = useState<boolean>(false);         //whether player has won or not
+  const [word, setWord] = useState<string>("");                 //the word to guess
+  const [numGuesses, setNumGuesses] = useState<number>(0);      //number of guesses
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
+    //start game if the input field isn't empty
     if (word != '') {
       setGameStage('during');
     }
   }
 
+  //if the player has won or the time has run out end the game
   useEffect(() => {
     if (result || timeUp) {
       setGameStage('after');
     }
-  }, [result, timeUp])
+  }, [result, timeUp, numGuesses])
 
+
+  //determine which page to show
   var display;
 
   if (gameStage == 'before') {
@@ -43,7 +48,12 @@ function App() {
           <button onClick={() => {if (time > 1) setTime(time - 1)}}>-</button>
           {time} min
           <button onClick={() => {setTime(time + 1)}}>+</button>
-        </div>  
+        </div>
+        <div className="setTime">
+          <button onClick={() => {if (numGuesses > 1) setNumGuesses(numGuesses - 1)}}>-</button>
+          {numGuesses} guesses
+          <button onClick={() => {setNumGuesses(numGuesses + 1)}}>+</button>
+        </div>
       </div>
   } else if (gameStage == 'during') {
     display = <Hangman
@@ -53,6 +63,8 @@ function App() {
                 time={time}
                 result={result}
                 setResult={setResult}
+                numGuesses={numGuesses}
+                setNumGuesses={setNumGuesses}
               />
   } else {
     display = <div>
