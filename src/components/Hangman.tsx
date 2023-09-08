@@ -38,6 +38,7 @@ const Hangman = ({timeUp, setTimeUp, word, time, result, setResult, numGuesses, 
 
     return (
         <div>
+            <Timer seconds={time * 60}/>
             <p>{maskedWord}</p>
             <div className='letters'>
                 {
@@ -56,7 +57,7 @@ const Hangman = ({timeUp, setTimeUp, word, time, result, setResult, numGuesses, 
                     )
                 }
             </div>
-            <Timer seconds={time * 60}/>
+            
         </div>
     );
 }

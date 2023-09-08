@@ -14,7 +14,7 @@ function App() {
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    //start game if the input field isn't empty
+    //start game only if a secret word has been chosen.
     if (word != '') {
       setGameStage('during');
     }
@@ -24,6 +24,7 @@ function App() {
   useEffect(() => {
     if (result || timeUp) {
       setGameStage('after');
+      setNumGuesses(0);
     }
   }, [result, timeUp, numGuesses])
 
